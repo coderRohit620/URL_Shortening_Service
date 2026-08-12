@@ -1,7 +1,6 @@
-import { loginUser, registerUser } from "../services/auth.service"
-import { ApiResponse } from "../utils/ApiResponse";
-import { asyncHandler } from "../utils/asyncHandler";
-import genrateToken from "../utils/genrateToken";
+import { loginUser, registerUser } from "../services/auth.service.js"
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
 
 

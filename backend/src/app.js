@@ -20,4 +20,10 @@ app.get("/", (req, res) => {
   });
 });
 
+
+
+import authRoutes from "./routes/auth.routes.js";
+
+app.use("/api/v1/auth", authRoutes);
+
 export { app };

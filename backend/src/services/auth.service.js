@@ -1,9 +1,11 @@
 import User from "../models/user.model.js"
+import { ApiError } from "../utils/ApiError.js";
 
 const registerUser = async({name,email,password}) =>{
-    const exists = await User.findOne({email });
-    if(exists){
-        throw new Error("Email already Exists");
+    const existingUser = await User.findOne({email });
+
+    if(existingUser){
+        throw new ApiError(409, "User already exists with this email")
     }
 
     const user = await User.create({
@@ -17,17 +19,20 @@ const loginUser = async ({email,password}) =>{
     const user = await User.findOne({email}).select("+password");
 
     if(!user){
-        throw new Error("Invalid email or password");
+        throw new ApiError(401, "Invalid email or password");
     }
 
-    const isMatch = await user.isPasswordCorrect(password);
+    const isPasswordMatch = await user.isPasswordCorrect(password);
 
-    if(!isMatch){
-        throw new Error("Invalid Email or Password")
+    if(!isPasswordMatch){
+        throw new ApiError(401,"Invalid Email or Password")
     }
 
     return user;
 };
 
-export {registerUser,loginUser}
+export {
+    registerUser,
+    loginUser,
+};
 
