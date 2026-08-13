@@ -1,31 +1,38 @@
 import { loginUser, registerUser } from "../services/auth.service.js"
+import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
 
 
-const generateAccessAndRefereshToken = async (userId) => {
-  try {
-    const user = await User.findById(userId);
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+};
 
-    user.refreshToken = refreshToken;
-    await user.save({ validateBeforeSave: false });
 
-    return { accessToken, refreshToken };
-  } catch (error) {
-    throw new ApiError(
-      500,
-      "something went wrong while generation referesh and access token"
-    );
-  }
+const generateAccessAndRefreshToken = async (userId) => {
+    try {
+        const user = await User.findById(userId);
+        const accessToken = user.generateAccessToken();
+        const refreshToken = user.generateRefreshToken();
+
+        user.refreshToken = refreshToken;
+        await user.save({ validateBeforeSave: false });
+
+        return { accessToken, refreshToken };
+    } catch (error) {
+        throw new ApiError(
+            500,
+            "something went wrong while generation referesh and access token"
+        );
+    }
 };
 
 const register = asyncHandler(async (req, res) => {
     const user = await registerUser(req.body);
 
-     const { accessToken, refreshToken } =
+    const { accessToken, refreshToken } =
         await generateAccessAndRefreshToken(user._id);
 
     const loggedInUser = await User.findById(user._id)
@@ -47,9 +54,9 @@ const register = asyncHandler(async (req, res) => {
         );
 })
 
-const login = asyncHandler(async (req,res) => {
+const login = asyncHandler(async (req, res) => {
     const user = await loginUser(req.body);
-    
+
     const { accessToken, refreshToken } =
         await generateAccessAndRefreshToken(user._id);
 
@@ -72,8 +79,8 @@ const login = asyncHandler(async (req,res) => {
         );
 })
 
-const logout = asyncHandler(async (req,res)=>{
-     await User.findByIdAndUpdate(
+const logout = asyncHandler(async (req, res) => {
+    await User.findByIdAndUpdate(
         req.user._id,
         {
             $unset: {
@@ -98,7 +105,7 @@ const logout = asyncHandler(async (req,res)=>{
         );
 });
 
-const getCurrentUser = asyncHandler(async(req,res)=>{
+const getCurrentUser = asyncHandler(async (req, res) => {
     return res.status(200).json(
         new ApiResponse(
             200,
@@ -109,7 +116,7 @@ const getCurrentUser = asyncHandler(async(req,res)=>{
 });
 
 export {
-    login, 
+    login,
     register,
     logout,
     getCurrentUser,
