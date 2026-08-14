@@ -27,9 +27,10 @@ const userSchema = new Schema(
       minlength: 6,
       select: false,
     },
+
     refreshToken: {
-      type: String
-    }
+      type: String,
+    },
   },
   {
     timestamps: true,
@@ -39,30 +40,30 @@ const userSchema = new Schema(
 // Hash password before saving
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
-  this.password = await bcrypt.hash(this.password, 10)
-})
+  this.password = await bcrypt.hash(this.password, 10);
+});
 
 // Compare password
 userSchema.methods.isPasswordCorrect = async function (password) {
-  return await bcrypt.compare(password, this.password)
-}
+  return await bcrypt.compare(password, this.password);
+};
 
-// Generate JWT token
+// Generate short-lived Access Token
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
-      email: this._email,
-      username: this.username,
-      fullName: this.fullName
+      email: this.email,
+      name: this.name,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRATION
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRATION,
     }
-  )
-}
+  );
+};
 
+// Generate long-lived Refresh Token
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {
@@ -70,9 +71,9 @@ userSchema.methods.generateRefreshToken = function () {
     },
     process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRATION
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRATION,
     }
-  )
-}
+  );
+};
 
 export const User = mongoose.model("User", userSchema);
