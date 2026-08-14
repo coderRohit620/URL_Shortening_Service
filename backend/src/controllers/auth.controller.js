@@ -1,5 +1,4 @@
-import { loginUser, registerUser } from "../services/auth.service.js"
-import { ApiError } from "../utils/ApiError.js";
+import { authService } from "../services/auth.service.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
@@ -8,32 +7,17 @@ import { User } from "../models/user.model.js";
 const cookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
 };
 
 
-const generateAccessAndRefreshToken = async (userId) => {
-    try {
-        const user = await User.findById(userId);
-        const accessToken = user.generateAccessToken();
-        const refreshToken = user.generateRefreshToken();
 
-        user.refreshToken = refreshToken;
-        await user.save({ validateBeforeSave: false });
-
-        return { accessToken, refreshToken };
-    } catch (error) {
-        throw new ApiError(
-            500,
-            "something went wrong while generation referesh and access token"
-        );
-    }
-};
 
 const register = asyncHandler(async (req, res) => {
-    const user = await registerUser(req.body);
+    const user = await authService.registerUser(req.body);
 
     const { accessToken, refreshToken } =
-        await generateAccessAndRefreshToken(user._id);
+        await authService.generateTokens(user._id);
 
     const loggedInUser = await User.findById(user._id)
         .select("-password -refreshToken");
@@ -55,10 +39,10 @@ const register = asyncHandler(async (req, res) => {
 })
 
 const login = asyncHandler(async (req, res) => {
-    const user = await loginUser(req.body);
+    const user = await authService.loginUser(req.body);
 
     const { accessToken, refreshToken } =
-        await generateAccessAndRefreshToken(user._id);
+        await authService.generateTokens(user._id);
 
     const loggedInUser = await User.findById(user._id)
         .select("-password -refreshToken");
@@ -80,17 +64,7 @@ const login = asyncHandler(async (req, res) => {
 })
 
 const logout = asyncHandler(async (req, res) => {
-    await User.findByIdAndUpdate(
-        req.user._id,
-        {
-            $unset: {
-                refreshToken: 1,
-            },
-        },
-        {
-            new: true,
-        }
-    );
+    await authService.logoutUser(req.user._id);
 
     return res
         .status(200)
