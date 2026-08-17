@@ -12,10 +12,11 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 // POST /api/v1/url/shorten  (protected)
 const createShortUrl = asyncHandler(async (req, res) => {
     const { fullUrl } = req.body;
+    const userId = req.user?._id;
 
     const urlDoc = await urlService.shortenUrl({
         fullUrl,
-        userId: req.user._id,
+        userId,
     });
 
     return res

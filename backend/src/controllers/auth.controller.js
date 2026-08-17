@@ -11,8 +11,6 @@ const cookieOptions = {
 };
 
 
-
-
 const register = asyncHandler(async (req, res) => {
     const user = await authService.registerUser(req.body);
 
@@ -74,7 +72,7 @@ const logout = asyncHandler(async (req, res) => {
             new ApiResponse(
                 200,
                 {},
-                "Logout successful"
+                "Logout Successful"
             )
         );
 });
@@ -84,7 +82,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
         new ApiResponse(
             200,
             req.user,
-            "Current user fetched successfully"
+            "Current User Fetched Successfully"
         )
     );
 });
