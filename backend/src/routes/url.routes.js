@@ -8,8 +8,10 @@ import { verifyJWT } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-// All URL management routes are protected
-router.post("/shorten", verifyJWT, createShortUrl);
+// Public — anyone can shorten a URL
+router.post("/shorten", createShortUrl);
+
+// Protected — only logged-in users can manage their URLs
 router.get("/my-urls", verifyJWT, getUserUrls);
 router.delete("/:id", verifyJWT, deleteUrl);
 
