@@ -1,5 +1,9 @@
 # 🔗 LinkSnip — URL Shortening Service
 
+## [GitHub Repository](https://github.com/siddharth9367/URL_Shortening_Service)
+## [Live Demo](https://linksnip1.onrender.com/)
+
+
 A full-stack URL shortening application that lets anyone instantly shorten long URLs into clean, shareable links. Authenticated users get a personal dashboard with click analytics, link management, and persistent history.
 
 ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)
