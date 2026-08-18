@@ -554,8 +554,6 @@ Dashboard,
 Login/Register pages here.
 ![alt text](<Screenshot 2026-08-19 050441.png>)
 ![alt text](<Screenshot 2026-08-19 050457.png>)
-![alt text](<Screenshot 2026-08-19 050607.png>)
-![alt text](<Screenshot 2026-08-19 050653.png>)
 
 --- 
 
