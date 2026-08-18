@@ -545,13 +545,14 @@ GET http://localhost:8000/aB3dX7z
 
 ## 📸 Screenshots
 
-> Add screenshots of the Home page,
+> Add screenshots of the
+##Home page,
 ![alt text](<Screenshot 2026-08-19 050426.png>)
 
-Dashboard,
+##Dashboard,
 ![alt text](<Screenshot 2026-08-19 050607.png>)
 
-Login/Register pages here.
+##Login/Register pages here.
 ![alt text](<Screenshot 2026-08-19 050441.png>)
 ![alt text](<Screenshot 2026-08-19 050457.png>)
 
