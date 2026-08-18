@@ -4,12 +4,12 @@ import {
     getUserUrls,
     deleteUrl,
 } from "../controllers/url.controller.js";
-import { verifyJWT } from "../middleware/auth.middleware.js";
+import { verifyJWT, optionalJWT } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-// Public — anyone can shorten a URL
-router.post("/shorten", createShortUrl);
+// Public — anyone can shorten, but logged-in users get their ID attached
+router.post("/shorten", optionalJWT, createShortUrl);
 
 // Protected — only logged-in users can manage their URLs
 router.get("/my-urls", verifyJWT, getUserUrls);
