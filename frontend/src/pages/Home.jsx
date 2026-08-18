@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../api/axios';
+import api, { BASE_URL } from '../api/axios';
 import toast from 'react-hot-toast';
 import { FiCopy, FiExternalLink, FiLink, FiZap, FiGlobe } from 'react-icons/fi';
 
@@ -18,7 +18,7 @@ const Home = () => {
       const response = await api.post('/url/shorten', { fullUrl });
       const data = response.data.data;
       setShortenedUrl({
-        shortUrl: `http://localhost:8000/${data.short_url}`,
+        shortUrl: `${BASE_URL}/${data.short_url}`,
         originalUrl: data.full_url,
       });
       toast.success('URL shortened successfully!');

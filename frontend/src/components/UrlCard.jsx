@@ -1,9 +1,10 @@
 import React from 'react';
 import { FiCopy, FiTrash2, FiExternalLink, FiBarChart2 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import { BASE_URL } from '../api/axios';
 
 const UrlCard = ({ url, onDelete }) => {
-  const shortUrlLink = `http://localhost:8000/${url.short_url}`;
+  const shortUrlLink = `${BASE_URL}/${url.short_url}`;
 
   const truncateUrl = (str) => {
     if (str.length > 60) {
@@ -35,7 +36,7 @@ const UrlCard = ({ url, onDelete }) => {
             </a>
           </div>
         </div>
-        
+
         <div className="url-card-stats">
           <span className="url-date">Created on {formatDate(url.createdAt)}</span>
           <span className="url-clicks">
@@ -43,7 +44,7 @@ const UrlCard = ({ url, onDelete }) => {
           </span>
         </div>
       </div>
-      
+
       <div className="url-card-actions">
         <button onClick={handleCopy} className="btn-action btn-copy" title="Copy to clipboard">
           <FiCopy /> Copy
