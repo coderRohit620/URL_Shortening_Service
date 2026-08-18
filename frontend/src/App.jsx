@@ -11,15 +11,24 @@ import NotFound from './pages/NotFound';
 import './App.css';
 
 const App = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   return (
     <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
-        <Route path="/register" element={user ? <Navigate to="/dashboard" replace /> : <Register />} />
+
+        {/* Wait for auth check to finish before deciding where to send the user */}
+        <Route
+          path="/login"
+          element={loading ? null : (user ? <Navigate to="/dashboard" replace /> : <Login />)}
+        />
+        <Route
+          path="/register"
+          element={loading ? null : (user ? <Navigate to="/dashboard" replace /> : <Register />)}
+        />
+
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>

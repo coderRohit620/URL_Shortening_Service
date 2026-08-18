@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 
@@ -11,9 +11,6 @@ const Register = () => {
   const { user, register } = useAuth();
   const navigate = useNavigate();
 
-  if (user) {
-    return <Navigate to="/dashboard" />;
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
